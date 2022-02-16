@@ -1,6 +1,5 @@
 antlr4-python3-runtime==4.8
 appdirs==1.4.4
-apturl==0.5.2
 argon2-cffi==18.3.0
 asgiref==3.4.1
 atom==0.7.0
