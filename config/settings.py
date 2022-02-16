@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
-import django_heroku
 
+import django_heroku
+import dotenv
+import dj_database_url
 
 # Configure Django App for Heroku.
 
@@ -21,6 +23,9 @@ import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -83,12 +88,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
 # Password validation
@@ -137,4 +138,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+
 django_heroku.settings(locals())
+
+# Add these at the very last line of settings.py
+options = DATABASES['default'].get('OPTIONS', {})
+options.pop('sslmode', None)
