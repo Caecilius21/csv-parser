@@ -10,23 +10,31 @@ def sinusoide(temps, amplitude, frequence):
 
 @api_view(['GET', 'POST'])
 def graph(request):
-    if request.method == 'GET':
-        frequence = 10
-        amplitude = 10
-        temps = 10
-    elif request.method == 'POST':
-        inputs = request.data
-        print(inputs)
-        frequence = float(inputs['frequence'])
-        amplitude = float(inputs['amplitude'])
-        temps = float(inputs['temps'])
+    try:
+        if request.method == 'GET':
+            frequence = 10
+            amplitude = 10
+            temps = 10
+        elif request.method == 'POST':
+            inputs = request.data
+            print(inputs)
+            frequence = float(inputs['frequence'])
+            amplitude = float(inputs['amplitude'])
+            temps = float(inputs['temps'])
 
-    categories = list(np.linspace(temps-50, temps+50, 1000))
-    data = [sinusoide(t, amplitude, frequence) for t in categories]
-    res = sinusoide(temps, amplitude, frequence)
+        categories = list(np.linspace(temps-50, temps+50, 1000))
+        data = [sinusoide(t, amplitude, frequence) for t in categories]
+        res = sinusoide(temps, amplitude, frequence)
 
-    return Response({
-        "categories": categories,
-        "data": data,
-        "res": res
-    })
+        return Response({
+            "categories": categories,
+            "data": data,
+            "res": res
+        })
+    except Exception as e:
+        print(e)
+        return Response({
+            "categories": [],
+            "data": [],
+            "res": 'NA'
+        })
