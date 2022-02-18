@@ -1,9 +1,11 @@
+import numpy as np
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from .views import sinusoide
 
 from rest_framework.test import APIRequestFactory, APIClient, RequestsClient
+import random
 
 
 # Using the standard RequestFactory API to create a form POST request
@@ -31,13 +33,23 @@ class TestingFrontend(TestCase):
         cls.url = reverse('homepage')
 
     # def test_template(self):        
-    #     # Tests that a GET request works and renders the correct
-    #     # template
     #     response = self.client.get(self.url)
     #     self.assertEqual(response.status_code, 200)
+    #     self.assertTemplateUsed(response, 'frontend/index.html')
 
 
 class TestingValues(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.temps = abs(random.random()) * 1000
+        cls.amplitude = random.random() * 1000
+        cls.frequency = abs(random.random()) * 1000
+
     def test_value(self):
         self.assertEqual(sinusoide(0, 0, 0), 0)
-    #     self.assertTemplateUsed(response, 'frontend/index.html')
+
+    def test_greater_amplitude(self):
+        self.assertGreaterEqual(sinusoide(self.temps, self.amplitude, self.frequency), -self.amplitude)
+
+    def test_greater_amplitude(self):
+        self.assertLessEqual(sinusoide(self.temps, self.amplitude, self.frequency), self.amplitude)

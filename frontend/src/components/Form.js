@@ -28,7 +28,15 @@ export default function Form({applyInputs}) {
     console.log(typeof(amplitude))
     console.log(typeof(frequence))
     console.log(typeof(temps))
-    
+    if (temps<0) {
+      alert('time should be positive')
+      return 
+    };
+    if (frequence<0) {
+      alert('frequency should be positive')
+      return 
+    };
+
     // if (!(typeof(amplitude)==='number')) return;
     // if (!(typeof(frequence)==='number')) return;
     // if (!(typeof(temps)==='number')) return;
